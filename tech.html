@@ -11,6 +11,28 @@
 <body>
   <h1> Tech </h1>
 
+  <h3> <b> 27 Feb 2020 </b> On Writing Good Unit Tests </h3>
+  <p> I still remember the day I learned about automated testing. I was in my junior fall of college, taking a class about software engineering. All of my other classes up to that point had been very "CS"-y and not very, well, "practical." This particular class required a semester-long software engineering project with CI/CD, testing and (somewhat humorously) UML diagrams. A guest lecturer pulled my group to the side and asked us if we knew how to write a test. And thus the magic of Assert() was revealed to me. Today as a software engineer, I pride myself on the quality of my tests and the efficiency of my CI/CD pipeline. I don't consider a feature "done" unless there are tests. I will not tell you my code is "ready" if I didn't push the play button and wait for a versioned, tested executable to come out of the other end of the pipeline. I definitely think these are some of my strenghts as a software engineer but there are also areas of software engineering that I'd still like to improve on. </p> 
+
+   <p> It's kind of hard to definitively say what a "good" test is but there are some easy ways to identify bad ones. So we can start there. Bad things to do in tests: </p>
+   <ul>
+    <li> Depend on other tests </li>
+    <li> Depend on external factors that can change, such as databases or web services</li>
+    <li> Only test the positive cases </li>
+    <li> Stop writing tests after the initial development (if you find an edge case later, fix it and write a test!) </li> 
+  </ul>
+
+   <p> Here are my tips for good testing (but this is by no means comprehensive!): </p>
+   <ul>
+    <li> Think about equivalence classes & consider some (reasonable) ones </li
+    <li> Fuzz it (aka throw absolute nonsense inputs at it). This one makes more sense if you have user-facing surfaces, but can be useful if you use a data source that could one day feed your program garbage. </li> 
+    <li> Consider testing in your initial design (my current favorite framework for this is dependency injection) </li> 
+    <li> Write a lot of small tests (hence the name "unit") but also consider some end-to-end tests to make sure your program executes in the way you think it does once it's all put together. I've caught some <b> nasty </b> bugs this way. </li> 
+  </ul> 
+    
+  <p> In my personal experience, comprehensive unit testing has saved me a lot of trouble. It's costly to do up-front and your non-developer coworkers might question why simple features tend to take you so long, but you will more than make up for the time when your program works well and you can identify bugs very quickly. I <i>love</i> my end-to-end tests and I would hate to try to "verify" that my program was working by crawling through application logs and hoping everything looked right. When in doubt, write a test! Your future self will thank you. </p> 
+
+       
   <h3> 5 Things I Want to Learn (or improve) in 2020 </h3>
   <ul>
     <li> Configuration management (probably Ansible) </li>
