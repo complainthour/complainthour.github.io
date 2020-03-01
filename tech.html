@@ -11,6 +11,26 @@
 <body>
   <h1> Tech </h1>
 
+  <h3> 1 March 2020 Lambdas! </b> 
+  <p> Today I was wandering around my little AWS playground and I was kind of bored by what I was doing (messing with flask and security groups) so I decided to see if I could get a Lambda up and running. Some days I love following tutorials and absorbing every word. Other days, I want to just break things and see how far I can get. Today was one of those days. </p>
+  <p> So what is a Lambda? It's a function-as-a-service. You give AWS some code to run and it figures out the rest for you. How's that different from running code on EC2 or in a container? Well, it's even easier. There's no infrastructure, OS, or even runtime to worry about. You give AWS the code -- literally the source code -- and it takes care of the rest. </p>
+  <p> Well you do have to give it a trigger. Otherwise it would just be code that AWS doesn't know when to run. </p> 
+  <p> Here are (roughly) the steps with commentary, for doing what I did today: </p
+  <ol>
+    <li> In the AWS Console, open Lambdas and Create Function</li>
+    <li> Author from scratch (it's more fun this way...?) </li>
+    <li> Choose a runtime you like (Python here) </li>
+    <li> Permissions: Create new with basic Lambda permissions </li>
+    <li> Add trigger: API Gateway (trigger this function on an API call) </li> 
+    <li> Create new REST API; Open with API Key </li> 
+  </ol>
+
+  <p> So at this point I ostensibly have my own API Gateway backed by a lambda function. But how do I use it? On the function's Configuration tab, there's a Designer diagram. Click the API Gateway icon. It will show some configurations, including the API endpoint. So open up a new tab and try it out! </p>
+  <p> Well, you'll find that it doesn't work. You get a nice little {"message":"Forbidden"} response from your own API because you set the authorizations to Open with API Key but you didn't provide a key! </p>
+  <p> Get the key from the AWS Console's API Gateway service and navigating to API Keys. The API Gateway page is also where you can disable API Keys or enable IAM authorizations for your APIs. </p>
+  <p> One way to provide the API key to the endpoint is in the headers as an x-api-key. You'll notice that <code> curl $ApiEndpoint </code> gives you back the same forbidden response, while <code> curl -i -H "x-api-key: $Key" $Endpoint </code> invokes your Lambda! </p>
+  <p> At this point your Lambda will execute the boilerplate Hello World python code that gets populated when you create a python Lambda but you can edit it to do whatever you want! </p>
+
   <h3> <b> 27 Feb 2020 </b> On Writing Good Unit Tests </h3>
   <p> I still remember the day I learned about automated testing. I was in my junior fall semester of college, taking a class about software engineering. All of my other classes up to that point had been very "CS"-y and not very, well, "practical." This particular class required a semester-long software engineering project with CI/CD, testing and (somewhat humorously) UML diagrams. A guest lecturer pulled my group to the side and asked us if we knew how to write a test. And thus the magic of Assert() was revealed to me. Today as a software engineer, I pride myself on the quality of my tests and the efficiency of my CI/CD pipeline. I don't consider a feature "done" unless there are tests. I will not tell you my code is "ready" if I didn't push the play button and wait for a versioned, tested executable to come out of the other end of the pipeline. I definitely think these are some of my strenghts as a software engineer but there are also some things that I'd still like to improve on in this area. </p> 
 
