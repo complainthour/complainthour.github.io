@@ -11,13 +11,91 @@
 <body>
   <h1> Tech </h1>
 
+<h3> 8 August 2020: MongoDB </h3>
+
+<p> Thanks to watching that video (see post below) about NoSQL databases, I decided to get familiar (re-familiar?) with MongoDB. I have been adjacent to MongoDB before (it was part of a project I worked on) but I want to get more hands-on. </p>
+
+<p> It starts with installing MongoDB (https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/).</p>
+
+<p> </p>
+
+
+
+<h3> <b> 4 Aug 2020 </b> A brief interlude: NoSQL Databases </h3>
+<p> Notes from watching <a href="https://www.youtube.com/watch?v=qI_g07C_Q5I"> Introduction to NoSQL, Martin Fowler </a>
+<p> Problem: Object-relational impedance mismatch (Things are logically organized into objects in code, but those objects have to be split up and stored into tables and mapped by schema.) Hence ORMs. </p>
+<p> SQL is designed to run on large servers, not large grids of small hardware which became dominant as large internet companies grew in the 2000s. </p>
+<p> Thus Bigtable & Dynamo </p>
+<p> NoSQL is hard to define, but it's generally non-relational, cluster-friendly, schema-less, open source. </p>
+<p> There are four general categories of NoSQL: </p>
+<ol>
+  <li> Column-family. Examples: Bigtable  </li>
+  <li> Graph. (Node and edge graph model. Good at moving across relationships between things (wherease in relational, you need foreign keys, joins.) Interesting query language for navigating graphs. )Examples: Neo4j </li>
+  <li> Document (Typically stored as JSON. You can query into the document structure. An attribute is kind of like a key...) Examples: MongoDB, Dynamo</li>
+  <li> Key-value (Like a persistent hashmap. You can usually store metadata about the records, though, so this becomes more like a document database.). Examples: </li>
+</ol>
+
+<p> Martin Fowler calls Document, Key-Value and Column-family "Aggregate-Oriented" databases. </p>
+
+<p> Though NoSQL is schema-less, there is an implicit schema in NoSQL dbs that becomes clear when you start querying! For example, querying MongoDB for a particular JSON attribute. </p>
+
+<p> Big advantage of aggregate-oriented is that you can store multiple pieces of information together in a single record, whereas in a relational db, you would need to have two tables and map one row from a table to multiple rows of another table in order to associate the information correctly. </p>
+
+<p> Aggregation makes clustering easy because you know what will need to be stored close together. </p> 
+
+<p> Column-family is also aggregate-oriented. </p>
+
+<p> Aggregation has a drawback: really difficult to slice and dice your data after you've decided on the aggregation. </p>
+
+<p> So how do the different NoSQL models handle relationships? Aggregate-oriented databases are similar to relational dbs, in that you have to associate by attributes or values in the data. Graph databases are oriented toward relationships since they are node-edge models. This is good guide for deciding which db to use. </p>
+
+<p> Consistency in NoSQL: SQL=ACID, NoSQL=BASE. But Martin Fowler isn't a fan of this. Graph db's are ACID. Aggregate-oriented databases don't need ACID quite as much. Aggregations are transaction boundaries! So you shouldn't really need to lock more than one aggregation at a time. If you update multiple documents at a time in document dbs, then you need additional atomicity.</p>
+
+<p> In general, transactions are achieved by letting a user retrieve a versioned record, updating that versioned record, and sending it back. Then when two users have written at the same time to their own copy of the version, you can do whatever conflict resolution you need to. </p>
+
+<p> Logical consistency vs. replication consistency </p>
+
+<p> What if two nodes lose communication with each other? Do you allow both to modify the same object, or neither? This is a tradeoff between consistency and availability. Dynamo needed to guarantee availability in the shopping cart for Amazon. </p>
+
+<p> CAP Theorem: Consistency, Availability, PartitionTolerance. Pick 2. (aka, if you get a network partition (communication failure between nodes), you can either have availability or consistency.) But this is on a spectrum, so it's not always just one or the other. Even if the network is up, you have a performance tradeoff if you want to be 100% consistent since it takes time to absolutely guarantee consistency across nodes. So it's a safety vs. liveness in concurrency issue. </p>
+
+<p> So when to use a NoSQL database? Two drivers: 1. Large amounts of data that can't fit well into a relational database. 2. Natural aggregates, for example when publishing news stories that have metadata and content together. Another reason includes analytics, as an alternative to datawarehousing. </p> 
+
+<h3> <b> 3 Aug 2020 </b> DigitalOcean Databases </h3>
+<p> Just some notes as I try out DigitalOcean's database-as-a-service platform. </p>
+
+<p> General observations: </p>
+<ul>
+  <li> Pricing is pretty up-front</li>
+  <li> They give you a lot of nice little security hints -- allow/deny IPs, use 2FA, put your recovery codes in an encrypted file or pw manager, only showing OAuth token once ever </li>
+  <li> Instantly I'm noticing a lack of integrations with any identity platform on the database (but this is a hard problem) </li>
+  <li> I can see that the randomly generated database admin pw is pretty strong and can be rotated manually -- auto rotations maybe?</li>
+</ul>
+
+<p> What I'm doing: </p>
+<ol>
+  <li> Created my DO account </li>
+  <li> Created new Postgres 12 db </li>
+  <li> Did some initial configs on it (IP allow listing) </li>
+  <li> <i> brew install postgres </i> because my college MacBook, where I did all of my college db work, is asleep </li>
+  <li> Connect to my new db from the psql client. Pretty smooth; basically what I would expect. </li>
+  <li> Found a dataset on Kaggle in CSV format, created a table for it in the db, used \copy command in psql to copy the data in. Now I can query Netflix titles! </li>
+  <li> Generated OAuth API Bearer Token and used it to list my database clusters via HTTPS request (note: not immediately clear to me here that I would need to list all clusters first, then get the cluster id, then get more specific details from it. Wish cluster id was avialable on UI.)</li>
+</ol>
+
+<p> Questions: </p>
+<ul>
+  <li> What's this .crt file it generated for me? It says it relates to my specific project (unit of organization for DO resources). Is
+it to allow my workstation to trust my project? So it's a server certificate? (Is this for machine-to-machine auth when you use other DO resources?)</li>
+</ul>
+
 
  <h3> <b> 1 Aug 2020 </b> Checking in on my 2020 goals </h3>
 <p> Wow, it has been a while! As the COVID-19 pandemic completely took over life as we knew it in 2020, I was making sporadic progress on the goals I outlined above. I also have some more clarity on what I'm wanting looking into the future career-wise. So without further adieu, here's what I've been working on: </p>
 
 
   <ul>
-    <li> <b> Configuration management (probably Ansible): </b> Nothing amazing here. </li>
+    <li> <b> Configuration management (probably Ansible): </b> A while back, I played around with Ansible on AWS as a way to spin up and configure some EC2 instances.  </li>
     <li> <b> Containers: </b> I did put some time into this one! I got Docker Desktop set up at home and just poked around for a bit with the Flask image and said "hello, world!" from Docker. I also tried out a security product that's distributed as a Docker image. I took a self-paced course on containers and I generally understand the basics now. I know why you'd use one over a VM, where to get images, what a Dockerfile is, how to spin up a container, how to map ports & storage, and how to set up a little environment with multiple containers that communicate with one another (network). Next on my list for this one is: orchestration/k8s. </li>
     <li> <b> (improve) Software design for testability: </b> Are we ever really done with this one? :) Again, nothing really specific here, but I haven't stopped writing tests!</li> 
     <li> <b> API design: </b> Nope. </li> 
